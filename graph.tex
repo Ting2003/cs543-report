@@ -11,6 +11,7 @@ graph represent different type of regions. An example graph is shown in Figure~\
 
 In Figure~\ref{eg_graph}, edge lines of different color represent different region type. In order to build such a graph, we first utilize the 
 neighboring information of tiles in the extraction step to locate the neighbors of tiles. Here we use 8-connection structure. Then, we divide each edge of a tile into 3 segments. For 4 edges, there will be 12 line segments. Besides, we also need to represent the middle of the tile, since it can be the dead end of road, city or cloister. Another item is used to represent whether there is a shield in the tile or not. As a 
-result, for each tile, we create a vector of 14 dimension to represent one tile. For all the template tiles, we manually create such a vector.
+result, for each tile, we create a vector of 14 dimension to represent one tile. For all the template tiles, we manually create such a vector. With the tile index and rotation for each extracted tile from template matching process, we can modify the order of the items in the 
+vector to generate the corresponding vector for graph with extracted tiles.
 
 With the information from above steps, we can create the tile connection graph. 
