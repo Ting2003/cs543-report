@@ -1,0 +1,43 @@
+\section{Tile Extraction}
+After taking the pictures, we have to extract tiles from the pictures.
+In this section, we are going to discuss details about the tile 
+extraction process.
+
+\begin{figure}[htbp]
+	  \centering
+	  \includegraphics[width=0.5\textwidth]{Original_im.pdf}
+	  \caption{Original image}
+	  \label{Original_im}
+\end{figure}
+
+Figure~\ref{Original_im} shows the whole picture without follower. 
+In the extraction process, the aim is to extract the boundary lines of 
+tiles. Since hough transformation method is good for detecting lines, we
+first extracted edge pixels with canny edge detector and tried hough 
+transform to detect boundary lines of tiles. However, the result is not 
+good. A lot of boundary lines of tiles are missing, and we can not recover 
+the boundary lines for each tile.
+
+We propose another method which can effectively extract the boundary lines of
+ tiles. The main process is as follows:
+\begin{enumerate}
+	\item Extract edge pixels with oriented filters.
+	
+			Use oriented filters, we first extract and edge information of the 
+			pictures. We assume all the boundary lines of tiles are along horizontal 
+			and vertical direction. As a result, we only keep edge pixel whose 
+			magnitude is within $5\,^{\circ}$ of horizontal and vertical direction. 
+			The extracted edge map is shown in :
+			
+			
+			\begin{figure}[htbp]
+				  \centering
+				  \includegraphics[width=0.5\textwidth]{Edge_map.pdf}
+				  \caption{Edge map}
+				  \label{Edge_map}
+			\end{figure}
+	\item
+\end{enumerate}
+
+ 
+
