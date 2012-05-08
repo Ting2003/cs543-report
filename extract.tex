@@ -22,14 +22,13 @@ the boundary lines for each tile.
 We propose another method which can effectively extract the boundary lines of
  tiles. The main process is as follows:
 \begin{enumerate}
-	\item Extract edge pixels with oriented filters.
+	\item Extract edge map with oriented filters.
 	
 			Use oriented filters, we first extract and edge information of the 
 			pictures. We assume all the boundary lines of tiles are along horizontal 
 			and vertical direction. As a result, we only keep edge pixel whose 
 			magnitude is within $5\,^{\circ}$ of horizontal and vertical direction. 
-			The extracted edge map is shown in :
-			
+			The extracted edge map is shown in Figure~\ref{Edge_map}.
 			
 			\begin{figure}[htbp]
 				  \centering
@@ -37,7 +36,26 @@ We propose another method which can effectively extract the boundary lines of
 				  \caption{Edge map}
 				  \label{Edge_map}
 			\end{figure}
-	\item
+			
+	\item Extract boundary lines with connected component method.
+	
+			After extracting edge map with oriented filters, there are still a lot of 
+			discontinuous edge pixels in edge map. Most of these edge pixels are within 
+			the tile boundaries and is not of our interest. As a result, we filter these 
+			discontinuous edge pixels with some threshold. Then, we treat the continuous 
+			pixels in edge map as a component, and extract boundary line of these components.
+			Again, we keep those lines which are very close to horizontal and vertical ones.
+			The resulting distribution of extracted lines are shown in Figure~\ref{Connect}.
+			In Figure~\ref{Connect}, the white lines are those edges after filtering step but 
+			are beyond the thresholding range of horizontal and vertical lines.
+			
+			 \begin{figure}[htbp]
+				  \centering
+				  \includegraphics[width=0.5\textwidth]{short_edges.pdf}
+				  \caption{Connect Component}
+				  \label{Connect}
+			\end{figure}
+			
 \end{enumerate}
 
  
