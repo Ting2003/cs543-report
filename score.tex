@@ -1,9 +1,9 @@
 \section{Compute Score of Followers}
-In this section, we will use the example graph from Figure~\ref{eg_graph} to illustrate the computing score process.
+In this section, we will utilize the example graph from Figure~\ref{eg_graph} to illustrate the score computing process.
 
 \subsection{Find out connected regions}
-As we can see from Figure~\ref{eg_graph}, there are several connected regions, such as field, city and road. We need to find out how many 
-connected regions of field, city and road respectively. 
+As of Figure~\ref{eg_graph}, there are several connected regions in the graph, such as field, city and road. We need to find out how many 
+connected field regions, city regions and road regions. 
 
 We first find total number of regions in each tile, and assign each line segment into different regions. Then, all the tiles have a list 
 of regions. An example of finding regions for one tile is shown in Figure~\ref{tile_region}. The number indicates the region index each 
@@ -20,23 +20,23 @@ After locating all regions for each of the extracted tile, we need to merge the 
 all connected regions. After merging all the regions from all tiles, we obtain a region list where each of the edge segment is assigned to 
 the corresponding region. These regions are classified into field, road and city.
 
-\subsection{Compute score for each connected regions}
+\subsection{Compute score for each connected region}
 In this section, we compute the scores for each connected region including cloister, field, city and road. 
 
 It is defined that the scores of region such as city equals to the number of tiles 
-contained in the connected region. If there is a shield in some tile, the score of this region is added by the number of tiles containing 
-shield in the region. For connected region such as road, the score equals to number of tiles in the region. Since each region contains the tiles included in the region, with the rules for city and road regions, it is easy to compute the scores.
+contained in a connected city region. If there is a shield in some tile, the score of this region is added by the number of tiles containing 
+shield in the region. For connected region such as road, the score equals to number of tiles in the road region. Since each region contains the tiles included in the region, with the rules for city and road regions, it is easy to compute the scores.
 
-For connected field regions, it is complicated to find out the score. The score of a field is not correlated to the number of tiles within the region but is proportional to the number of completed city regions within the field. As a result, we need to first identify the completed 
+For connected field regions, it is complicated to find out the score. The score of a field is not correlated to the number of tiles within the region but is proportional to the number of completed city regions within the field. The score of each field is $3\times N_{complete_city}$. As a result, we need to first identify the completed 
 city regions in the graph, and find out which field regions each completed city region belongs to.
 
-We detect the complete city by check whether all the edge segments in the connected region have a neighbor. If all the edge segments in the 
-region have neighbors, than this region is complete, or else is not. To find out which field regions this complete city belongs to, for each 
-line segment belongs to the region, we find out its neighboring field line segment and assign the complete city to the field region the line segment belongs to.
+We detect the complete city by checking whether all the edge segments in the connected region have a neighbor or not. If all the edge segments in the 
+region have neighbors, this region is complete, or else is not. To find out which field regions this complete city belongs to, for each 
+line segment within the region, we find out its neighboring field line segment and assign the complete city to the field region the line segment belongs to.
 
 For cloister, after seeing there is a cloister, we check number of neighboring tiles around the tile containing cloister. Assume there are $N(N<=8)$ tiles around cloister, the score for the cloister region is $N+1$.
 
-The scores for connected regions of example graph in Figure~\ref{tile_region} is shown in Figure~\ref{score_eg_graph}.
+The scores for connected regions of example graph in Figure~\ref{eg_graph} is shown in Figure~\ref{score_eg_graph}.
 
 \begin{figure}[htbp]
 	  \centering
@@ -49,8 +49,9 @@ The scores for connected regions of example graph in Figure~\ref{tile_region} is
 Since all the regions have already been scored, we only need to find out the connected region index each follower occupied. Our idea is to 
 determine which edge segment is closest to the follower and has the same type of region as the follower. The follower will have the same score of the region that the line segment is located in.
 
-We divide the tile that contains a follower into $3\times3$ grid, and deciding which spot the follower belong to by comparing the distance between centroid of follower polygon and centroids 
-of the spots in the grid, which is shown in Figure~\ref{tile_grid}. We assign the follower polygon to the spots has the minimum distance. If the spots of minimum distance is the center of the grid, we compare the center spots with its 4 neighboring spots. If any of the 4 neighboring spots has the same type of region with the center spot, we assign the follower to the same region with the region of the neighboring spot. 
+We divide the tile containing a follower into $3\times3$ grid, and decide which spot the follower belongs to by comparing the distance between centroid of follower polygon and centroids 
+of the spots in the grid, which is shown in Figure~\ref{tile_grid}. We assign the follower polygon to the spots has the minimum distance 
+with follower polygon. If the spots of minimum distance is the center of the grid, we compare the center spots with its 4 neighboring spots. If any of the 4 neighboring spots has the same type of region with the center spot, we assign the follower to the same region with the region of the neighboring spot. 
 
 \begin{figure}[htbp]
 	  \centering
@@ -59,7 +60,7 @@ of the spots in the grid, which is shown in Figure~\ref{tile_grid}. We assign th
 	  \label{tile_grid}
 \end{figure}
 
-We test several follower in the example graph, and successfully get correct score for the followers. The results is as Figure~\ref{follower_score_eg}. In Figure~\ref{follower_score_eg}, red rectangle represents followers, and the number within the rectangle stands for the score for each follower.
+We test several followers in the example graph, and successfully get correct score for the followers. The results is as Figure~\ref{follower_score_eg}. Red rectangle represents followers, and the number within the rectangle is the score for each follower.
 
 \begin{figure}[htbp]
 	  \centering
