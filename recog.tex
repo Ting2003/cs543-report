@@ -1,25 +1,25 @@
 \section{Follower Occupied Region Recognition}
 After detecting the position of follower, we need to recognize the type of region that the follower is occupied. Considering the types of 
-regions, including \textbf{field}, \textbf{city}, and \textbf{road} has obvious difference in color, we decide to use color intensity as the feature for 
-recognizing the occupied region of each follower. For the fourth type of region, which is cloister, since all its boundary edge in the tile 
+regions, including "field", "city", and "road" has obvious difference in color, we decide to use color intensity as the feature for 
+recognizing the occupied region of each follower. For the fourth type of region, which is "cloister", since all its boundary edge in the tile 
 is field or at most 1 road segment, it will be individually taken care of and is beyond this category.
 
 We noticed that the color intensity of different regions along blue channel as well as the difference of green and red channel has obvious 
 difference, which is shown as Figure~\ref{Channel_diff}.
 
-	\begin{figure}[htbp]
+    \begin{figure}[htbp]
         \centering
-        \subfigure[][Channel color intensity of \textbf{City}]{
-                \includegraphics[width=0.5\textwidth]{city.pdf}\label{subfig.1}}
-        \subfigure[][Channel color intensity of \textbf{Field}]{
-                \includegraphics[width=0.5\textwidth]{field.pdf}\label{subfig.2}}
-		\subfigure[][Channel color intensity of \textbf{Road}]{
-		         \includegraphics[width=0.5\textwidth]{road.pdf}\label{subfig.3}}
+        \subfigure[][Channel color intensity of City]{
+                \includegraphics[width=0.2\textwidth]{city.pdf}\label{subfig.1}}
+        \subfigure[][Channel color intensity of Field]{
+                \includegraphics[width=0.2\textwidth]{field.pdf}\label{subfig.2}}
+	\subfigure[][Channel color intensity of Road]{
+	         \includegraphics[width=0.2\textwidth]{road.pdf}\label{subfig.3}}
 
         \caption{Channel color intensity of different regions}
-        \subref{subfig.1} Channel color intensity of \textbf{City}
-        \subref{subfig.2} Channel color intensity of \textbf{Field}
-		\subref{subfig.3} Channel color intensity of \textbf{Road}
+        \subref{subfig.1} Channel color intensity of City
+        \subref{subfig.2} Channel color intensity of Field
+		\subref{subfig.3} Channel color intensity of Road
         \label{Channel_diff}
      \end{figure}
 
@@ -29,7 +29,7 @@ results are in Figure~\ref{recog_results}.
 
 	\begin{figure}[htbp]
 		  \centering
-		  \includegraphics[width=0.5\textwidth]{recog_results.pdf}
+		  \includegraphics[width=0.9\textwidth]{recog_results.pdf}
 		  \caption{Recognition results of occupied region of each follower}
 		  \label{recog_results}
 	\end{figure}
