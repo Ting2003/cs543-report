@@ -87,8 +87,22 @@ We propose another method which can effectively extract the boundary lines of
 				  \caption{Merge lines}
 				  \label{Merge_line}
 			\end{figure}
-			
 \end{enumerate}
-
- 
-
+	The white pixels in Figure~\ref{Merge_line} is the edge map by Canny. From Figure~\ref{Merge_line}, it can be 
+	seen that the extracted lines is in highly correspondence with the boundary 
+	lines of edges. Assume the intersection of lines are a set of spots. It can been seen that there are spots contain
+	no tile, and spots contain tile. In order to extract all the spots contains tiles, we observed that most of the 
+	space of false spots are clean, while in the edge area of the spots, there might be some noise generated in the 
+	process of extracting lines. On the other hand, true spots have more evenly distributed edge pixels. We accumulate 
+	number of pixels of middle region of each spot and compare it with a threshold. If the spots contains less pixels 
+	than the threshold, it is considered to have no tile.
+	
+	With this assumption, we extract all the tiles and they are complete true tiles. The extracted tiles are listed in 
+	Figure~\ref{ex_tiles}.
+	
+	\begin{figure}[htbp]
+		  \centering
+		  \includegraphics[width=0.5\textwidth]{no_follower_tiles.pdf}
+		  \caption{Extracted tiles}
+		  \label{ex_tiles}
+	\end{figure}
