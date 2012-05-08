@@ -56,6 +56,38 @@ We propose another method which can effectively extract the boundary lines of
 				  \label{Connect}
 			\end{figure}
 			
+	\item  Merge lines to fit for boundaries of tiles.
+			
+			In Figure~\ref{Connect}, we can see that the extracted lines covers most of the tile 
+			boundaries. Although a few boundary lines are missing, it can be recovered by boundary 
+			lines along the same row or column. We can see that some in some region, there are several 
+			boundary lines making a thick line region. On the other hand, there are also some other false 
+			short lines in Figure~\ref{Connect}. Both of these two case need to be take care of. 
+			
+			First we extend all the lines and intersect the lines with the boundary of image. Then, for 
+			the thick line region, we utilized non-maximum like technique to produce a thin line. Specifically, 
+			we search the neighborhood of each line, and if there exist some other lines nearby, we merge the 
+			neighboring lines. We accumulate all the number of pixels the merged lines covered in edge map. 
+			Observing the true boundary lines and false boundary lines, we can see that the false lines covers 
+			only a very small part of pixels in edge map, while the true lines covers much larger number of pixels 
+			in edge map. With this feature, we set a threshold for the number of pixels each line covered in edge 
+			map, and those false lines are filtered out. 
+			
+			Until this point, most of the boundary lines are true ones, while there might still be several false 
+			edges. In order to effectively eliminate these lines, we perform histogram of distance along every two 
+			neighboring lines along horizontal and vertical directions. The higher the distance, the higher weight 
+			for the distance will be. The peak of the histogram represents the horizontal and vertical side length 
+			of each tile. We then start from the first line from horizontal and vertical direction, and 
+			incrementally add the voted side length. In order to avoid the accumulate error, we round the added 
+			results to the true line position. The results of merging lines is shown in Figure~\ref{Merge_line}. 
+			
+			\begin{figure}[htbp]
+				  \centering
+				  \includegraphics[width=0.5\textwidth]{clustered_edges.pdf}
+				  \caption{Merge lines}
+				  \label{Merge_line}
+			\end{figure}
+			
 \end{enumerate}
 
  
