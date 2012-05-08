@@ -51,3 +51,69 @@ on board. The scoring rules for each feature is as follows:
 \end{itemize}
 
 \subsection{Our Approach}
+We first make a few assumptions to the inputs.  One major problem of many
+computer vision application is due to occlusion.  In our case, the follower
+placed may blocked some of the visible features, which makes it hard for a
+computer program to identify the region.  To simply the problem, we require two
+images to be taken at the end of game.  In particular, we should first take a
+photo for the game board that \emph{contains} the followers, and another one
+after removing all of the followers. We further assume that the photos are
+taken from a top down view such that there is no perspective distortion of the
+tiles, i.e., all tiles are nearly rectangles. Moreover, the game board
+must be aligned to the edge of the view plane. Note that these requirements
+should not be hard to satisfy. Indeed, we can always compute a perspective
+transformation to align the game board. However, we just use assumptions
+to focus on the main problem and make our life a bit easier.
+
+The main problem we are facing is to segment the meaningful regions (e.g.,
+fields and cities) out from the game board and identify followers to score
+them. We have two observations:
+\begin{itemize}
+  \item Each tile has a regular structure:
+   it has four edges, which can be a road, a city or a field segment.
+   The center of the tile also contains the following types of features:
+   end of a road, cloister, city segment, and field.
+ \item Although there are more than 70 pieces of tiles in a standard pack,
+   which is the game version we are considering, there are only 
+   about 20 types of tiles. Particularly, some tiles will have the same
+   structure, except for some decorating elements such as rocks
+   that will make the appearance vary.
+\end{itemize}
+Thus, this motivates us to do such:
+pre-compute the region information and visual features of each tile and store
+them as templates, match the tiles on game board to find the corresponding
+region informations. This is the basic idea of our approach.
+
+Given two input images, one with follower and one without, 
+the main flow of the program is as follows:
+\begin{itemize}
+\item Tile extraction.
+In this step, we want to extract each tiles so that 
+they can be matched to the template tiles later.
+In other words, we want to segment a set of images that
+corresponds to separate tiles from one given image.
+\item Tile matching.
+After extracting the tile images, we can perform image matching.
+Our approach is based on SIFT local descriptors and nearest neighbors.
+This will be further discussed.
+\item Follower detection and region recognition
+For each tile image, we also want to know if there is an follower.
+If yes, we want to know its color and place such that we can 
+identify the region it is occupying and score it for the corresponding player.
+\item Connection graph and region map
+  After the extraction and matching, we can build a graph
+  that contains the connectivity information.
+  From this graph, we can apply graph searching to build up the 
+  region information.
+\item Scoring. Finally, for each follower, we score them according
+  to the regions they are occupying using the connection graph and
+  region map.
+\end{itemize}
+
+In the following sections, we will introduce the technical details
+of each step. 
+Section~\ref{sec:extract}$\sim$\ref{sec:score} introduce the details
+of each step as described as above.
+Section~\ref{sec:expr} gives an example of executing our program
+on some real world examples.
+Finally, a conclusion is drawn in Section~\ref{sec:conclusion}.
