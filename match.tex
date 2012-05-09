@@ -1,2 +1,50 @@
 \section{Tile Matching}
+\label{sec:matching}
+After extracting the tile images, we will perform matching such that the regions
+corresponding to each tile can be identified. Our task is to match about 70 query
+tiles to about 25 template tiles. This step is based on interest point matching,
+where the features we used is SIFT descriptor~\cite{lowe1999object}. SIFT
+descriptor is a type of local descriptor that is scale invariant and proven to be
+very robust and reliable. The basic idea of SIFT matching is to extract SIFT
+local descriptors from two images, use RANSAC to compute a homography and try to
+find the match points. However, this will be slow since we have lots of images
+and each image will contain hundreds of SIFT descriptors. Since the template
+tiles are known to us, we can pre-compute the SIFT descriptors and store them in
+files as `SIFT database'. Given an input image, we extract its SIFT descriptors
+and try to find a nearest neighbor from the database for each of them. Then, we
+can use a major vote to vote for a matching template since the match will have
+lots of matched keypoints with high probability. One problem with the naive
+implementation is that the computational cost for searching a nearest neighbor
+will be high. Assume that there are $n$ input images and $m$ templates, where
+each of them contains to $O(k)$ SIFT local descriptors. Then, to find all nearest
+neighbors for the one SIFT descriptor, we need to compare it with $O(mk)$
+descriptors in the database, and there will $O(nmk^2)$ comparisons. To overcome
+this problem, we can use KD-tree to speed up the query. Then, each search will
+require only $O(\log (mk))$ time. This improves the performance dramatically.
+Figure~\ref{fig:sift} illustrates the flow.
+Figure~\ref{fig:sift:kdtree} shows that given an query image,
+we finds nearest neighbors for all of the SIFT descriptors of it
+in the KD-tree, where the SIFT descriptors are overlaid with the query
+images. Figure~\ref{fig:sift:template} shows the template image 
+that has the most votes and the matched SIFT descriptors.
 
+Note that after finding a match, we still need to find the rotation of the query.
+Traditional approach will be using RANSAC to fit a rotation matrix. In fact,
+there are only four possible rotations in our case. Thus, we can simply rotate
+the query image four times ($0^\circ$, $90^\circ$, $180^\circ$, $270^\circ$).
+For each rotation, we only need to compute the sum of square distance between
+the matched keypoints and find the smallest one. 
+
+\begin{figure}[b]
+\centering
+\subfigure[]{
+\includegraphics[height=.13\textheight]{sift.jpg}
+\label{fig:sift:kdtree}
+}
+\subfigure[]{
+\includegraphics[height=.13\textheight]{keypoints.jpg}
+\label{fig:sift:template}
+}
+\caption{SIFT matching.}
+\label{fig:sift}
+\end{figure}
