@@ -7,14 +7,20 @@ As of Figure~\ref{eg_graph}, there are several connected regions in the graph, s
 connected field regions, city regions and road regions. 
 
 We first find total number of regions in each tile, and assign each line segment into different regions. Then, all the tiles have a list 
-of regions. An example of finding regions for one tile is shown in Figure~\ref{tile_region}. The number indicates the region index each 
+of regions. An example of finding regions for one tile is shown in Figure~\ref{fig:tile_region}. The number indicates the region index each 
 line segments belongs to.
 
 \begin{figure}[htbp]
 	  \centering
-	  \includegraphics[width=0.5\textwidth]{tile_region.pdf}
-	  \caption{Regions in one tile}
-	  \label{tile_region}
+	  \subfigure[Regions in one tile]{
+	  	\includegraphics[width=0.4\textwidth]{tile_region.pdf}
+		\label{fig:tile_region}
+		}
+	  \subfigure[Scores of example graph]{
+		\includegraphics[width=0.4\textwidth]{score_example_graph.pdf}
+		\label{fig:score_eg_graph}
+		}
+	  \caption{Regions in one tile and scores of example graph.}
 \end{figure}
 
 After locating all regions for each of the extracted tile, we need to merge the regions of each tile in the tile connection graph and extract 
@@ -37,35 +43,27 @@ line segment within the region, we find out its neighboring field line segment a
 
 For cloister, after seeing there is a cloister, we check number of neighboring tiles around the tile containing cloister. Assume there are $N(N<=8)$ tiles around cloister, the score for the cloister region is $N+1$.
 
-The scores for connected regions of example graph in Figure~\ref{eg_graph} is shown in Figure~\ref{score_eg_graph}.
-
-\begin{figure}[htbp]
-	  \centering
-	  \includegraphics[width=0.5\textwidth]{score_example_graph.pdf}
-	  \caption{Scores for connected regions in example graph}
-	  \label{score_eg_graph}
-\end{figure}
+The scores for connected regions of example graph in Figure~\ref{eg_graph} is shown in Figure~\ref{fig:score_eg_graph}.
 
 \subsection{Compute score for each follower}
 Since all the regions have already been scored, we only need to find out the connected region index each follower occupied. Our idea is to 
 determine which edge segment is closest to the follower and has the same type of region as the follower. The follower will have the same score of the region that the line segment is located in.
 
 We divide the tile containing a follower into $3\times3$ grid, and decide which spot the follower belongs to by comparing the distance between centroid of follower polygon and centroids 
-of the spots in the grid, which is shown in Figure~\ref{tile_grid}. We assign the follower polygon to the spots has the minimum distance 
+of the spots in the grid, which is shown in Figure~\ref{fig:tile_grid}. We assign the follower polygon to the spots has the minimum distance 
 with follower polygon. If the spots of minimum distance is the center of the grid, we compare the center spots with its 4 neighboring spots. If any of the 4 neighboring spots has the same type of region with the center spot, we assign the follower to the same region with the region of the neighboring spot. 
 
 \begin{figure}[htbp]
 	  \centering
-	  \includegraphics[width=0.5\textwidth]{tile_grid.pdf}
-	  \caption{Match follower region with line segments}
-	  \label{tile_grid}
+	  \subfigure[Match follower region with line segments]{
+	  	\includegraphics[width=0.4\textwidth]{tile_grid.pdf}
+		\label{fig:tile_grid}
+	  }
+	  \subfigure[Follower scores in example graph]{
+		 \includegraphics[width=0.4\textwidth]{follower_score_eg.pdf}
+	  	 \label{fig:follower_score_eg}
+	  }
+	\caption{Follower region matching and scores in example graph}
 \end{figure}
 
-We test several followers in the example graph, and successfully get correct score for the followers. The results is as Figure~\ref{follower_score_eg}. Red rectangle represents followers, and the number within the rectangle is the score for each follower.
-
-\begin{figure}[htbp]
-	  \centering
-	  \includegraphics[width=0.5\textwidth]{follower_score_eg.pdf}
-	  \caption{Follower scores in example graph}
-	  \label{follower_score_eg}
-\end{figure}
+We test several followers in the example graph, and successfully get correct score for the followers. The results is as Figure~\ref{fig:follower_score_eg}. Red rectangle represents followers, and the number within the rectangle is the score for each follower.
