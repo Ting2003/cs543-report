@@ -5,10 +5,16 @@ In this section, we are going to discuss details about the tile
 extraction process.
 
 \begin{figure}[htbp]
-	  \centering
-	  \includegraphics[width=0.5\textwidth]{game.pdf}
-	  \caption{Original image}
-	  \label{Original_im}
+ \centering
+\subfigure[Original image]{
+\includegraphics[width=0.45\textwidth]{game.pdf}
+\label{Original_im}
+}
+\subfigure[Edge map]{
+\includegraphics[width=0.45\textwidth]{oriented_edges.pdf}
+\label{Edge_map}
+}
+\caption{Original image and its edge map.}
 \end{figure}
 
 Figure~\ref{Original_im} shows the whole picture without follower. In the
@@ -26,13 +32,6 @@ vertical directions. As a result, we only keep edge pixel whose magnitude is
 within $5\,^{\circ}$ tolerance of horizontal and vertical direction. The
 extracted edge map is shown in Figure~\ref{Edge_map}.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.5\textwidth]{oriented_edges.pdf}
-\caption{Edge map}
-\label{Edge_map}
-\end{figure}
-
 \item Extract boundary lines with connected component method. After extracting
 edge map with oriented filters, there are still a lot of discontinuous edge
 pixels in edge map. Most of these edge pixels are within the tile boundaries and
@@ -44,10 +43,17 @@ extracted lines are shown in Figure~\ref{Connect}. In Figure~\ref{Connect}, the
 white lines are those edges after filtering step but are beyond the thresholding
 range of horizontal and vertical lines.
 
-\begin{figure}[htbp] \centering
-\includegraphics[width=0.5\textwidth]{short_edges.pdf}
-\caption{Connect Component}
+\begin{figure}[htbp]
+\centering
+\subfigure[Connect Components]{
+\includegraphics[width=0.45\textwidth]{short_edges.pdf}
 \label{Connect}
+}
+\subfigure[Merge lines]{
+\includegraphics[width=0.45\textwidth]{clustered_edges.pdf}
+\label{Merge_line}
+}
+\caption{Connect Component and merge lines.}
 \end{figure}
 
 \item Merge lines to generate boundary lines of tiles. In Figure~\ref{Connect},
@@ -78,11 +84,6 @@ vertical direction, and incrementally add the voted side length. In order to
 avoid the accumulate error, we round the added results to the true line
 position. The results of merging lines is shown in Figure~\ref{Merge_line}.
 
-\begin{figure}[htbp] \centering
-\includegraphics[width=0.5\textwidth]{clustered_edges.pdf}
-\caption{Merge lines}
-\label{Merge_line}
-\end{figure} 
 \end{enumerate} 
 
 The white pixels in Figure~\ref{Merge_line} is the edge map by Canny. From
@@ -101,7 +102,7 @@ The extracted tiles are listed in Figure~\ref{ex_tiles}.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=1.0\textwidth]{no_follower_tiles.pdf} 
+\includegraphics[width=.8\textwidth]{no_follower_tiles.pdf} 
 \caption{Extracted tiles}
 \label{ex_tiles}
 \end{figure}
