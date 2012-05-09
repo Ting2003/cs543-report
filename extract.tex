@@ -11,96 +11,97 @@ extraction process.
 	  \label{Original_im}
 \end{figure}
 
-Figure~\ref{Original_im} shows the whole picture without follower. 
-In the extraction process, the aim is to extract the boundary lines of 
-tiles. Since hough transform is good for detecting lines, we
-first extracted edge pixels with canny edge detector and tried hough 
-transform to detect boundary lines of tiles. However, the result is not 
-good. A lot of boundary lines of tiles are missing, and we can not recover 
-the boundary lines for each tile.
+Figure~\ref{Original_im} shows the whole picture without follower. In the
+extraction process, the aim is to extract the boundary lines of tiles. Since
+hough transform is good for detecting lines, we first extracted edge pixels with
+canny edge detector and tried hough transform to detect boundary lines of tiles.
+However, the result is not good. A lot of boundary lines of tiles are missing,
+and we can not recover the boundary lines for each tile.
 
 We propose another method which can effectively extract the boundary lines of
- tiles. The main process is as follows:
-\begin{enumerate}
-	\item Extract edge map with oriented filters.
-	
-			With oriented filters, we first extract edge map of the 
-			picture. We assume all the boundary lines of tiles are along horizontal 
-			and vertical directions. As a result, we only keep edge pixel whose 
-			magnitude is within $5\,^{\circ}$ tolerance of horizontal and vertical direction. 
-			The extracted edge map is shown in Figure~\ref{Edge_map}.
-			
-			\begin{figure}[htbp]
-				  \centering
-				  \includegraphics[width=0.5\textwidth]{oriented_edges.pdf}
-				  \caption{Edge map}
-				  \label{Edge_map}
-			\end{figure}
-			
-	\item Extract boundary lines with connected component method.
-	
-			After extracting edge map with oriented filters, there are still a lot of 
-			discontinuous edge pixels in edge map. Most of these edge pixels are within 
-			the tile boundaries and is not of our interest. We filter out these 
-			discontinuous edge pixels with some threshold. Then, we treat the continuous 
-			pixels in edge map as a component, and extract boundary line of these components.
-			Again, we keep those lines which are very close to horizontal and vertical ones.
-			The resulting distribution of extracted lines are shown in Figure~\ref{Connect}.
-			In Figure~\ref{Connect}, the white lines are those edges after filtering step but 
-			are beyond the thresholding range of horizontal and vertical lines.
-			
-			 \begin{figure}[htbp]
-				  \centering
-				  \includegraphics[width=0.5\textwidth]{short_edges.pdf}
-				  \caption{Connect Component}
-				  \label{Connect}
-			\end{figure}
-			
-	\item  Merge lines to generate boundary lines of tiles.
-			
-			In Figure~\ref{Connect}, we can see that the extracted lines covers most of the tile 
-			boundaries. Although a few boundary lines are missing, it can be recovered by boundary 
-			lines along the same row or column. In some region, there are several 
-			boundary lines making a thick line region. There are also some other false 
-			short lines in Figure~\ref{Connect}. Both of these two case need to be taken care of. 
-			
-			First, we extend all the lines and intersect the lines with the boundaries of image. Then, for 
-			the thick line region, we utilized non-maximum like technique to produce a thin line. Specifically, 
-			we search the neighborhood of each line. If there exist some other lines nearby, we merge the 
-			neighboring lines. At the same time, we accumulate all the number of pixels the merged lines covered in edge map. 
-			Difference between true and false boundary lines is that the false lines covers 
-			only a very small part of pixels in edge map, while the true lines covers much larger number of pixels 
-			in edge map. With this observation, we set a threshold for the number of pixels each line covered in edge 
-			map, and most of the false lines are filtered out. 
-			
-			Most of the left lines are true boundary ones, while there might still be several false 
-			lines. In order to effectively eliminate these lines, we perform histogram of distance along every two 
-			neighboring lines of horizontal and vertical directions. The higher the distance, the higher weight 
-			for the distance will be. The peak of the histogram represents the horizontal and vertical side length 
-			of each tile. We then start from the first line from horizontal and vertical direction, and 
-			incrementally add the voted side length. In order to avoid the accumulate error, we round the added 
-			results to the true line position. The results of merging lines is shown in Figure~\ref{Merge_line}. 
-			
-			\begin{figure}[htbp]
-				  \centering
-				  \includegraphics[width=0.5\textwidth]{clustered_edges.pdf}
-				  \caption{Merge lines}
-				  \label{Merge_line}
-			\end{figure}
-\end{enumerate}
-	The white pixels in Figure~\ref{Merge_line} is the edge map by Canny. From Figure~\ref{Merge_line}, it can be 
-	seen that the extracted lines is in highly correspondence with the boundary 
-	lines of edges. Assume the intersection of lines are a set of spots. It can been seen that there are spots contain
-	no tile, and spots contain tile. We observed that most of the 
-	space of false spots are clean, while in the edge area of the spots, there might be some noise generated in the 
-	tile extraction process. On the other hand, edge pixels within true spots are more evenly distributed within all regions of 
-	the spots. As a result, we set a threshold for the number of pixels in middle region and only keep the spots which contains 
-	bigger number of pixels than the threshold. Experimental results showed that this method is very effective and is able to 
-	extract only the true tiles. The extracted tiles are listed in Figure~\ref{ex_tiles}.
-	
-	\begin{figure}[htbp]
-		  \centering
-		  \includegraphics[width=1.0\textwidth]{no_follower_tiles.pdf}
-		  \caption{Extracted tiles}
-		  \label{ex_tiles}
-	\end{figure}
+tiles. The main process is as follows: \begin{enumerate} \item Extract edge map
+with oriented filters. With oriented filters, we first extract edge map of the
+picture. We assume all the boundary lines of tiles are along horizontal and
+vertical directions. As a result, we only keep edge pixel whose magnitude is
+within $5\,^{\circ}$ tolerance of horizontal and vertical direction. The
+extracted edge map is shown in Figure~\ref{Edge_map}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{oriented_edges.pdf}
+\caption{Edge map}
+\label{Edge_map}
+\end{figure}
+
+\item Extract boundary lines with connected component method. After extracting
+edge map with oriented filters, there are still a lot of discontinuous edge
+pixels in edge map. Most of these edge pixels are within the tile boundaries and
+is not of our interest. We filter out these discontinuous edge pixels with some
+threshold. Then, we treat the continuous pixels in edge map as a component, and
+extract boundary line of these components. Again, we keep those lines which are
+very close to horizontal and vertical ones. The resulting distribution of
+extracted lines are shown in Figure~\ref{Connect}. In Figure~\ref{Connect}, the
+white lines are those edges after filtering step but are beyond the thresholding
+range of horizontal and vertical lines.
+
+\begin{figure}[htbp] \centering
+\includegraphics[width=0.5\textwidth]{short_edges.pdf}
+\caption{Connect Component}
+\label{Connect}
+\end{figure}
+
+\item Merge lines to generate boundary lines of tiles. In Figure~\ref{Connect},
+we can see that the extracted lines covers most of the tile boundaries. Although
+a few boundary lines are missing, it can be recovered by boundary lines along
+the same row or column. In some region, there are several boundary lines making
+a thick line region. There are also some other false short lines in
+Figure~\ref{Connect}. Both of these two case need to be taken care of.
+
+First, we extend all the lines and intersect the lines with the boundaries of
+image. Then, for the thick line region, we utilized non-maximum like technique
+to produce a thin line. Specifically, we search the neighborhood of each line.
+If there exist some other lines nearby, we merge the neighboring lines. At the
+same time, we accumulate all the number of pixels the merged lines covered in
+edge map. Difference between true and false boundary lines is that the false
+lines covers only a very small part of pixels in edge map, while the true lines
+covers much larger number of pixels in edge map. With this observation, we set a
+threshold for the number of pixels each line covered in edge map, and most of
+the false lines are filtered out.
+
+Most of the left lines are true boundary ones, while there might still be
+several false lines. In order to effectively eliminate these lines, we perform
+histogram of distance along every two neighboring lines of horizontal and
+vertical directions. The higher the distance, the higher weight for the distance
+will be. The peak of the histogram represents the horizontal and vertical side
+length of each tile. We then start from the first line from horizontal and
+vertical direction, and incrementally add the voted side length. In order to
+avoid the accumulate error, we round the added results to the true line
+position. The results of merging lines is shown in Figure~\ref{Merge_line}.
+
+\begin{figure}[htbp] \centering
+\includegraphics[width=0.5\textwidth]{clustered_edges.pdf}
+\caption{Merge lines}
+\label{Merge_line}
+\end{figure} 
+\end{enumerate} 
+
+The white pixels in Figure~\ref{Merge_line} is the edge map by Canny. From
+Figure~\ref{Merge_line}, it can be seen that the extracted lines is in highly
+correspondence with the boundary lines of edges. Assume the intersection of lines
+are a set of spots. It can been seen that there are spots contain no tile, and
+spots contain tile. We observed that most of the space of false spots are clean,
+while in the edge area of the spots, there might be some noise generated in the
+tile extraction process. On the other hand, edge pixels within true spots are
+more evenly distributed within all regions of the spots. As a result, we set a
+threshold for the number of pixels in middle region and only keep the spots which
+contains bigger number of pixels than the threshold. Experimental results showed
+that this method is very effective and is able to extract only the true tiles.
+The extracted tiles are listed in Figure~\ref{ex_tiles}.
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1.0\textwidth]{no_follower_tiles.pdf} 
+\caption{Extracted tiles}
+\label{ex_tiles}
+\end{figure}
