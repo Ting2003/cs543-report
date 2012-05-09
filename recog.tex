@@ -1,0 +1,28 @@
+\section{Follower Occupied Region Recognition}
+After detecting the position of follower, we need to recognize the type of region each follower occupies. Considering the types of 
+regions, including, ``field", ``city", and``road" are very different in color, we decide to use color intensity as the feature for 
+recognizing process. There is one more type of region, which is ``cloister". Since almost all of its boundary edges in the tile 
+are fields, it will be individually taken care of and we are not discuss this case in this session.
+
+We noticed that the color intensity of different regions along blue channel as well as the difference of green and red channel has obvious 
+difference, which is shown as Figure~\ref{channel_diff}. In Figure~\ref{channel_diff}, ``Blue" means image from blue channel, while ``Green - Red" means image from the difference of green and red channel. 
+
+	\begin{figure}[htbp]
+		  \centering
+		  \includegraphics[width=0.9\textwidth]{channel_diff.pdf}
+		  \caption{Channel color intensity of different regions}
+		  \label{channel_diff}
+	\end{figure}
+
+With the color intensity difference along different channels, we set some threshold for histogram of color intensities along the 
+2 channels, and successfully recognize the region each follower is occupied. The 
+results are in Figure~\ref{recog_results}.
+
+	\begin{figure}[htbp]
+		  \centering
+		  \includegraphics[width=0.9\textwidth]{recog_results.pdf}
+		  \caption{Recognition results of occupied region for each follower}
+		  \label{recog_results}
+	\end{figure}
+
+ 
